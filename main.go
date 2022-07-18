@@ -66,7 +66,23 @@ func main() {
 	// fmt.Printf("%d, %.3f\n", 1000000, randWrite(SizeGb*1))
 
 	size := 0
-	size = SizeKb * 1 / 4
+	// size = SizeKb * 1 / 4
+	// buffer = make([]int32, size)
+	// for i := 0; i < size; i++ {
+	// 	buffer[i] = 0
+	// }
+
+	// fmt.Println(len(buffer))
+
+	// var i int64
+	// for i = 0; i < accessCount; i++ {
+	// 	indexes[i] = int32(rand.Intn(size))
+	// }
+	// for i = 0; i < 1000; i++ {
+	// 	fmt.Printf("%d, %.3f\n", 1, randRead(size))
+	// }
+
+	size = SizeMb * 1 / 4
 	buffer = make([]int32, size)
 	for i := 0; i < size; i++ {
 		buffer[i] = 0
@@ -79,26 +95,8 @@ func main() {
 		indexes[i] = int32(rand.Intn(size))
 	}
 	for i = 0; i < 1000; i++ {
-		fmt.Printf("%d, %.3f\n", 1, randRead(size))
+		fmt.Printf("%d, %.3f\n", 1000, randRead(size))
 	}
-
-	// size = SizeKb * 32 / 4
-	// indexes = []int{}
-	// for i := 0; i < accessCount; i++ {
-	// 	indexes = append(indexes, rand.Intn(size))
-	// }
-	// for i := 0; i < 1000; i++ {
-	// 	fmt.Printf("%d, %.3f\n", 32, randRead(SizeKb*32/4))
-	// }
-
-	// size = SizeMb * 1 / 4
-	// indexes = []int{}
-	// for i := 0; i < accessCount; i++ {
-	// 	indexes = append(indexes, rand.Intn(size))
-	// }
-	// for i := 0; i < 1000; i++ {
-	// 	fmt.Printf("%d, %.3f\n", 1000, randRead(SizeMb*1/4))
-	// }
 
 	// size = SizeMb * 6 / 4
 	// buffer = make([]int32, size)
