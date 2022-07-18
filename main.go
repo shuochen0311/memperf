@@ -68,19 +68,21 @@ func main() {
 
 	size = SizeKb * 1 / 4
 	indexes = []int{}
+	// for i := 0; i < accessCount; i++ {
+	// 	indexes = append(indexes, rand.Intn(size))
+	// }
+	// for i := 0; i < 1000; i++ {
+	// 	fmt.Printf("%d, %.3f\n", 1, randRead(SizeKb*1/4))
+	// }
+
+	size = SizeKb * 32 / 4
+	indexes = []int{}
 	for i := 0; i < accessCount; i++ {
 		indexes = append(indexes, rand.Intn(size))
 	}
 	for i := 0; i < 1000; i++ {
-		fmt.Printf("%d, %.3f\n", 1, randRead(SizeKb*1/4))
+		fmt.Printf("%d, %.3f\n", 1, randRead(SizeKb*32/4))
 	}
-
-	// size = SizeKb * 32 / 4
-	// indexes = []int{}
-	// for i := 0; i < accessCount; i++ {
-	// 	indexes = append(indexes, rand.Intn(size))
-	// }
-	// fmt.Printf("%d, %.3f\n", 1, randRead(SizeKb*32/4))
 
 	// size = SizeMb * 1 / 4
 	// indexes = []int{}
