@@ -19,8 +19,9 @@ const (
 )
 
 var (
-	accessCount = 1 * 1000 * 1000
-	indexes     []int
+	accessCount int64 = 1 * 1000 * 1000 * 100
+	indexes     [1 * 1000 * 1000 * 100]int32
+	buffer      []int32
 )
 
 func main() {
@@ -65,9 +66,7 @@ func main() {
 	// fmt.Printf("%d, %.3f\n", 1000000, randWrite(SizeGb*1))
 
 	size := 0
-
 	size = SizeKb * 1 / 4
-	indexes = []int{}
 	// for i := 0; i < accessCount; i++ {
 	// 	indexes = append(indexes, rand.Intn(size))
 	// }
@@ -100,136 +99,63 @@ func main() {
 	// }
 	// fmt.Printf("%d, %.3f\n", 32000, randRead(SizeMb*32/4))
 
-	size = SizeMb * 768 / 4
-	indexes = []int{}
-	for i := 0; i < accessCount; i++ {
-		indexes = append(indexes, rand.Intn(size))
-	}
-	for i := 0; i < 1000; i++ {
-		fmt.Printf("%d, %.3f\n", 768000, randWrite(SizeMb*768))
-	}
-
-	// size = SizeMb * 48 / 4
+	// size = SizeMb * 768 / 4
 	// indexes = []int{}
 	// for i := 0; i < accessCount; i++ {
 	// 	indexes = append(indexes, rand.Intn(size))
 	// }
-	// for i := 0; i < 1000; i++ {
-	// 	fmt.Printf("%d, %.3f\n", 48000, randRead(SizeMb*48/4))
-	// }
+	// fmt.Printf("%d, %.3f\n", 768000, randWrite(SizeMb*768))
 
-}
-
-func hashTable(size int) float64 {
-	rand.Seed(time.Now().UnixNano())
-	iterations := 15
-
-	durations := make([]time.Duration, 0)
-	buffer := rand.Perm(size)
-	m := make(map[int]int, size)
-
+	size = SizeMb * 48 / 4
+	buffer = make([]int32, size)
 	for i := 0; i < size; i++ {
-		m[i] = 0
+		buffer[i] = 0
 	}
 
-	for i := 0; i < iterations; i++ {
-		start := time.Now()
-		for j := 0; j < size; j++ {
-			m[buffer[j]] = i
-		}
-		duration := time.Since(start)
-		durations = append(durations, duration)
+	fmt.Println(len(buffer))
+
+	var i int64
+	for i = 0; i < accessCount; i++ {
+		indexes[i] = int32(rand.Intn(size))
+	}
+	for i = 0; i < 1000; i++ {
+		fmt.Printf("%d, %.3f\n", 48000, randRead(size))
 	}
 
-	total := time.Duration(0)
-	for i := 0; i < len(durations); i++ {
-		total = total + durations[i]
-	}
-
-	avg := float64(total.Milliseconds()) / float64(len(durations))
-	return avg
 }
 
 func randRead(bufferSize int) float64 {
 	var n int32
 	var wg sync.WaitGroup
-	buffer := make([]int, bufferSize)
-	for i := 0; i < bufferSize; i++ {
-		buffer[i] = 0
-	}
 
-	for i := 0; i < 8; i++ {
+	var i int64
+	for i = 0; i < 8; i++ {
 		wg.Add(1)
-		go func() {
+		go func(index int64) {
 			defer wg.Done()
-			result := int32(randReadInternal(bufferSize, buffer))
+			result := int32(randReadInternal(bufferSize, buffer, index*accessCount/8))
 			atomic.AddInt32(&n, result)
-		}()
+		}(i)
 	}
 
 	wg.Wait()
 	return float64(n) / 8.0
 }
 
-func randReadInternal(bufferSize int, buffer []int) float64 {
+func randReadInternal(bufferSize int, buffer []int32, startPos int64) float64 {
 	iterations := 20
 	durations := make([]time.Duration, 0)
 	rand.Seed(time.Now().UnixNano())
 
 	for i := 0; i < iterations; i++ {
-		var result int
+		var result int32
 		start := time.Now()
-		for j := 0; j < accessCount; j++ {
+		for j := startPos; j < accessCount; j++ {
 			result |= buffer[indexes[j]]
 		}
 		duration := time.Since(start)
 		durations = append(durations, duration)
-		os.WriteFile("/dev/null", []byte(strconv.Itoa(result)), 0755)
-	}
-
-	total := time.Duration(0)
-	for i := 0; i < len(durations); i++ {
-		total = total + durations[i]
-	}
-
-	avg := float64(total.Milliseconds()) / float64(len(durations))
-	return avg
-}
-
-func randWrite(bufferSize int) float64 {
-	var n int32
-	var wg sync.WaitGroup
-	for i := 0; i < 8; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			result := int32(randWriteInternal(bufferSize))
-			atomic.AddInt32(&n, result)
-		}()
-	}
-
-	wg.Wait()
-	return float64(n) / 8.0
-}
-
-func randWriteInternal(bufferSize int) float64 {
-	iterations := 2
-	accessCount := 1 * 1000 * 1000
-	buffer := make([]int, bufferSize)
-	durations := make([]time.Duration, 0)
-	rand.Seed(time.Now().UnixNano())
-
-	for i := 0; i < bufferSize; i++ {
-		buffer[i] = 0
-	}
-
-	for i := 0; i < iterations; i++ {
-		start := time.Now()
-		for j := 0; j < accessCount; j++ {
-			buffer[rand.Intn(bufferSize)] = 0
-		}
-		duration := time.Since(start)
-		durations = append(durations, duration)
+		os.WriteFile("/dev/null", []byte(strconv.FormatInt(int64(result), 10)), 0755)
 	}
 
 	total := time.Duration(0)
