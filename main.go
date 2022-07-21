@@ -34,7 +34,7 @@ func main() {
 	}
 
 	rand.Seed(time.Now().UnixNano())
-	size := SizeMb * 42 / 4
+	size := SizeMb * 512 / 4
 	var i int64
 	buffer = make([]int32, size)
 	for i := 0; i < size; i++ {
