@@ -15,7 +15,7 @@
 
 using namespace std;
 
-long iterations = 1;
+long iterations = 20;
 long accessCount = 100ULL << 20;
 int threadCount = 8;
 vector<int32_t> indexes(accessCount, 0);
@@ -48,7 +48,7 @@ double randReadImpl(long index)
     return time / iterations;
 }
 
-double randWrite(long size)
+double randRead(long size)
 {
     readyCount = 0;
     totalTime = 0;
@@ -93,9 +93,9 @@ int main(int argc, char const *argv[])
     }
     
     for (int i = 0; i < 1000; i++) {
-        printf("%.3f\n", randWrite(size));
+        printf("%.3f\n", randRead(size));
     }
     return 0;
 }
-//g++ rand_read.cc -o test -pthread -O3
+//g++-7 rand_read.cc -o test -pthread -O3
 // to run ./test
