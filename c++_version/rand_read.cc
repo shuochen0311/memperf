@@ -97,5 +97,5 @@ int main(int argc, char const *argv[])
     }
     return 0;
 }
-//g++-7 rand_read.cc -o test -pthread -O3
+//g++ rand_read.cc -o test -pthread -O3
 // to run ./test
