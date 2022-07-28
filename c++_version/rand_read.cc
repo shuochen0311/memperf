@@ -15,7 +15,7 @@
 
 using namespace std;
 
-long iterations = 2000;
+long iterations = 20;
 long accessCount = 100ULL << 20;
 int threadCount = 8;
 vector<int32_t> indexes(accessCount, 0);
@@ -85,6 +85,9 @@ int main(int argc, char const *argv[])
 
     // prepare memory
     mem = (void*)malloc(size);
+    for (int i = 0; i < size; i++) {
+       ((char*)(mem))[i] = 'a';
+    }
     memset(mem, 0, size);
     srand(time(NULL));
 
