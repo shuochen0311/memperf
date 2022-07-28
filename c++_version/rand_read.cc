@@ -81,7 +81,7 @@ int main(int argc, char const *argv[])
     long SizeKb = 1ULL << 10;
 
     long size = SizeMb * 512;
-    printf("size is %l\n", size);
+    printf("size is %ld\n", size);
 
     // prepare memory
     mem = (void*)malloc(size);
