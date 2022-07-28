@@ -15,7 +15,7 @@
 
 using namespace std;
 
-long iterations = 20;
+long iterations = 2000;
 long accessCount = 100ULL << 20;
 int threadCount = 8;
 vector<int32_t> indexes(accessCount, 0);
@@ -40,7 +40,7 @@ double randReadImpl(long index)
             result |= ((char*)(mem))[n];
         }
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        time += std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();   
+        time += std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();   
         myfile << result;  
     }
 
