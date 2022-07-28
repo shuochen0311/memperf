@@ -80,7 +80,7 @@ int main(int argc, char const *argv[])
     long SizeMb = 1ULL << 20;
     long SizeKb = 1ULL << 10;
 
-    long size = SizeMb * 42;
+    long size = SizeKb * 1;
     printf("size is %ld\n", size);
 
     // prepare memory
