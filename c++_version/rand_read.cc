@@ -37,7 +37,7 @@ double randReadImpl(long index)
     for (long i = 0; i < iterations; i++) {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         for (long n = index; n < accessCount/8; n++) {
-            result |= ((char*)(mem))[n];
+            result |= ((char*)(mem))[indexes[n]];
         }
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         time += std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();   
