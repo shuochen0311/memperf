@@ -96,7 +96,7 @@ int main(int argc, char const *argv[])
         indexes[i] = rand() % size;
     }
     
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 3000; i++) {
         struct timeval tv;
         if(gettimeofday(&tv, NULL) != 0)
                 return 0;
