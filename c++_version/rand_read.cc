@@ -18,7 +18,7 @@ using namespace std;
 
 long iterations = 20;
 long accessCount = 100ULL << 20;
-int threadCount = 6;
+int threadCount = 8;
 vector<int32_t> indexes(accessCount, 0);
 atomic<int> readyCount;
 atomic<int> totalTime;
