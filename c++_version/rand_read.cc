@@ -38,7 +38,7 @@ double randReadImpl(long index)
     for (long i = 0; i < iterations; i++) {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         for (long n = index; n < accessCount/8; n++) {
-            result |= ((char*)(mem))[indexes[n]];
+            result |= ((char*)(mem))[n];
         }
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         time += std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count();   
@@ -75,7 +75,7 @@ double randRead(long size)
 
 int main(int argc, char const *argv[])
 {
-    cpuPinOffset = atoi(argv[0]);
+    cpuPinOffset = atoi(argv[1]);
     myfile.open("/dev/null");
     long  SizeGb = 1ULL << 30;
     long SizeMb = 1ULL << 20;
@@ -96,7 +96,7 @@ int main(int argc, char const *argv[])
         indexes[i] = rand() % size;
     }
     
-    for (int i = 0; i < 3000; i++) {
+    for (int i = 0; i < 30000; i++) {
         struct timeval tv;
         if(gettimeofday(&tv, NULL) != 0)
                 return 0;
