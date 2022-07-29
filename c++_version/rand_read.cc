@@ -12,6 +12,7 @@
 #include <fstream>
 #include <sched.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 using namespace std;
 
@@ -96,7 +97,12 @@ int main(int argc, char const *argv[])
     }
     
     for (int i = 0; i < 1000; i++) {
-        printf("%.3f\n", randRead(size));
+        struct timeval tv;
+        if(gettimeofday(&tv, NULL) != 0)
+                return 0;
+
+        auto ticks = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+        printf("%ld, %.3f\n", ticks, randRead(size));
     }
     return 0;
 }
